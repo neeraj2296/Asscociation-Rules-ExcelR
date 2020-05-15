@@ -1,12 +1,12 @@
+#Including the necassary Libraries
 library(arules)
 library(arulesViz)
 
+#Loading the data set
 setwd("E:\\Neeraj\\Exam and Careers\\DataScience\\Data Sets")
 groceries <- read.transactions("groceries.csv", sep=",")
 summary(groceries)
-
-arules::inspect(groceries[1:5])
-
+arules::inspect(groceries[1:5])#Inspecting the rules
 #inspect(groc[1:5])
 View(groceries[1:5])
 
@@ -45,6 +45,7 @@ arules::inspect(rules.pruned)
 plot(rules.pruned)
 plot(rules.pruned, method = 'grouped')
 
+#Writing the finalised rules to groceryrules.csv
 write(rules.pruned, file = "groceryrules.csv",sep = ",", quote = TRUE, row.names = FALSE)
 groceryrules_df <- as(rules.pruned, "data.frame")
 str(groceryrules_df)
