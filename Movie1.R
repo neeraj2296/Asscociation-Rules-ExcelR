@@ -1,9 +1,11 @@
+#Including the necassary Libraries
 library(arules)
 library(arulesViz)
 
+#Loading the data set
 mov <- read.csv(file.choose(), header = T, colClasses = 'factor')
 movi <- mov[,6:15]
-
+#Factorising the data for better classification
 movi$Sixth.Sense<-as.factor(movi$Sixth.Sense)
 movi$Gladiator<-as.factor(movi$Gladiator)
 movi$LOTR1<-as.factor(movi$LOTR1)
@@ -15,27 +17,27 @@ movi$Braveheart<-as.factor(movi$Braveheart)
 movi$Green.Mile<-as.factor(movi$Green.Mile)
 
 str(movi)
-
+#Applying the Apriori Alogithm and figuring out rules
 rules<-apriori(movi)
 rules.sorted<-sort(rules, by = 'lift')
 
+#Visualising the rules
 plot(rules, jitter = 0)
 plot(rules, method = 'grouped')
-
 summary(rules)
 summary(movi)
 
-# rules with rhs containing Patriot only
+# rules with rhs containing Patriot only & with all others taken as bought( i.e. 1)
 rules = apriori(movi,parameter = list(minlen = 1,supp = 0.1,conf = 0.8),appearance = list(rhs = c("Patriot=1"), lhs = c("Sixth.Sense=1",'Gladiator=1','LOTR1=1','Harry.Potter1=1','LOTR2=1','Harry.Potter2=1','LOTR=1','Braveheart=1','Green.Mile=1')))
 plot(rules)                                                                                          
 inspect(rules) 
 
-# rules with rhs containing Sixth Sense only
+# rules with rhs containing Sixth Sense only & with all others taken as bought( i.e. 1)
 rules = apriori(movi,parameter = list(minlen = 1,supp = 0.1,conf = 0.8),appearance = list(rhs = c("Sixth.Sense=1"), lhs = c("Patriot=1",'Gladiator=1','LOTR1=1','Harry.Potter1=1','LOTR2=1','Harry.Potter2=1','LOTR=1','Braveheart=1','Green.Mile=1')))
 plot(rules)                                                                                          
 inspect(rules)
 
-# rules with rhs containing Patriot and Sixth Sense both
+# rules with rhs containing Patriot and Sixth Sense both & with all others taken as bought( i.e. 1)
 rules = apriori(movi,parameter = list(minlen = 1,supp = 0.1,conf = 0.8),appearance = list(rhs = c("Patriot=1","Sixth.Sense=1"), lhs = c('Gladiator=1','LOTR1=1','Harry.Potter1=1','LOTR2=1','Harry.Potter2=1','LOTR=1','Braveheart=1','Green.Mile=1')))
 plot(rules)                                                                                          
 inspect(rules)
@@ -54,5 +56,3 @@ inspect(rules.pruned)
 plot(rules.pruned)
 plot(rules.pruned, method = 'grouped')
 plot(rules,method = 'graph')
-
-
